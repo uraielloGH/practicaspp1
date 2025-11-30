@@ -32,6 +32,12 @@
             {% endif %}
         </nav>
     </header>
+    {% if app.user %}
+    <div style="background: #eee; padding: 5px; font-size: 12px;">
+        Logueado como: {{ app.user.email }} |
+        Roles: {{ app.user.roles|join(', ') }}
+    </div>
+{% endif %}
 
     <main>
         {% block body %}{% endblock %}

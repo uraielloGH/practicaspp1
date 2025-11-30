@@ -1,4 +1,7 @@
 security:
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
@@ -29,11 +32,22 @@ security:
                 path: /
                 always_remember_me: true
 
-    # PROTECCIÓN DE RUTAS (esto lo agregamos ahora)
+    # PROTECCIÓN DE RUTAS
     access_control:
+        # Acceso del usuario
         - { path: ^/home, roles: ROLE_USER }
         - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/products, roles: ROLE_USER }
+
+        # Rutas del CRUD de categorías – ADMIN
+        - { path: ^/category/new, roles: ROLE_ADMIN }
+        - { path: ^/category/\d+/edit, roles: ROLE_ADMIN }
+        - { path: ^/category/\d+, roles: ROLE_ADMIN }
+
+        # Rutas del CRUD de productos –  ADMIN
+        - { path: ^/product/new, roles: ROLE_ADMIN }
+        - { path: ^/product/\d+/edit, roles: ROLE_ADMIN }
+        - { path: ^/product/\d+, roles: ROLE_ADMIN }
 
 when@test:
     security:
