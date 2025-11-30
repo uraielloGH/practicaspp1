@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recomendaciones{% endblock %}
+
+{% block body %}
+
+<h1 class="page-title">Encuesta para recomendaciones</h1>
+<p class="page-subtitle">Completá esta breve encuesta y obtené recomendaciones personalizadas.</p>
+
+<div class="brekky-card" style="max-width: 650px;">
+
+    {{ form_start(surveyForm) }}
+
+        <div class="brekky-form-row">
+            {{ form_row(surveyForm.activityLevel) }}
+        </div>
+
+        <div class="brekky-form-row">
+            {{ form_row(surveyForm.mainGoal) }}
+        </div>
+
+        <div class="brekky-form-row">
+            {{ form_row(surveyForm.flavorPreference) }}
+        </div>
+
+        <div class="brekky-form-row">
+            {{ form_row(surveyForm.restriction) }}
+        </div>
+
+        <div class="brekky-form-row">
+            {{ form_row(surveyForm.breakfastImportance) }}
+        </div>
+
+        <div class="brekky-form-row">
+            {{ form_row(surveyForm.notes) }}
+        </div>
+
+        <button type="submit" class="btn-brekky">Obtener recomendaciones</button>
+
+    {{ form_end(surveyForm) }}
+
+</div>
+
+<a class="btn-back" href="{{ path('app_home') }}" style="margin-top:20px;">← Volver al inicio</a>
+
+{% endblock %}

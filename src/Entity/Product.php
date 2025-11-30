@@ -43,7 +43,6 @@ class Product
     public function setName(string $name): self
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -55,7 +54,6 @@ class Product
     public function setDescription(?string $description): self
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -67,7 +65,6 @@ class Product
     public function setPrice(float $price): self
     {
         $this->price = $price;
-
         return $this;
     }
 
@@ -79,7 +76,6 @@ class Product
     public function setImage(?string $image): self
     {
         $this->image = $image;
-
         return $this;
     }
 
@@ -91,7 +87,6 @@ class Product
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
-
         return $this;
     }
 }

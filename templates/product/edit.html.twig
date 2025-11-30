@@ -1,13 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Product{% endblock %}
+{% block title %}Editar producto{% endblock %}
 
 {% block body %}
-    <h1>Edit Product</h1>
 
-    {{ include('product/_form.html.twig', {'button_label': 'Update'}) }}
+<h1 class="page-title">Editar producto</h1>
+<p class="page-subtitle">
+    Modificá la información del producto seleccionado.
+</p>
 
-    <a href="{{ path('app_product_index') }}">back to list</a>
+<div class="brekky-card" style="max-width:700px;">
+    {{ include('product/_form.html.twig', {'form': form, 'button_label': 'Guardar cambios'}) }}
+</div>
 
-    {{ include('product/_delete_form.html.twig') }}
 {% endblock %}

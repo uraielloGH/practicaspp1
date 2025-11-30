@@ -1,11 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Product{% endblock %}
+{% block title %}Nuevo producto{% endblock %}
 
 {% block body %}
-    <h1>Create new Product</h1>
 
-    {{ include('product/_form.html.twig') }}
+<h1 class="page-title">Agregar producto</h1>
+<p class="page-subtitle">
+    Cargá un nuevo producto al catálogo Brekky.
+</p>
 
-    <a href="{{ path('app_product_index') }}">back to list</a>
+<div class="brekky-card" style="max-width:700px;">
+    {{ include('product/_form.html.twig', {'form': form, 'button_label': 'Guardar'}) }}
+</div>
+
 {% endblock %}

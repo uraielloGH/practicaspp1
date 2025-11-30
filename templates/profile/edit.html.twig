@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mi perfil{% endblock %}
+
+{% block body %}
+
+<h1 class="page-title">Administrar perfil</h1>
+<p class="page-subtitle">
+    Actualizá tu información de usuario. La contraseña es opcional: solo cambiala si lo necesitás.
+</p>
+
+{# ===== MENSAJES FLASH (con animación) ===== #}
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="brekky-card flash-message" style="border-left:4px solid #6F4E37; margin-bottom:15px;">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+{# ===== FORMULARIO ===== #}
+<div class="brekky-card" style="max-width:600px;">
+    
+    {{ form_start(profileForm, { attr: { class: 'js-loading-form' } }) }}
+
+        <div class="brekky-form-row">
+            {{ form_row(profileForm.nombre) }}
+        </div>
+
+        <div class="brekky-form-row">
+            {{ form_row(profileForm.email) }}
+        </div>
+
+        <div class="brekky-form-row">
+            {{ form_row(profileForm.plainPassword) }}
+        </div>
+
+        <button type="submit" class="btn-brekky">
+            Guardar cambios
+        </button>
+
+        <a href="{{ path('app_home') }}" class="btn-back" style="margin-left:10px;">
+            Cancelar
+        </a>
+
+    {{ form_end(profileForm) }}
+
+</div>
+
+{% endblock %}

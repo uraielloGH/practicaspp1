@@ -2,11 +2,11 @@ security:
     role_hierarchy:
         ROLE_ADMIN: ROLE_USER
 
-    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+    # Hashing de contraseñas
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
 
-    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+    # Cargar usuarios desde la BD
     providers:
         app_user_provider:
             entity:
@@ -25,29 +25,40 @@ security:
 
             logout:
                 path: app_logout
+                # 🔥 Redirección después de cerrar sesión
+                target: app_home
 
             remember_me:
                 secret: '%kernel.secret%'
-                lifetime: 604800
+                lifetime: 604800  # 1 semana
                 path: /
                 always_remember_me: true
 
     # PROTECCIÓN DE RUTAS
     access_control:
-        # Acceso del usuario
+
+        # Rutas solo para usuarios logueados
         - { path: ^/home, roles: ROLE_USER }
+        - { path: ^/perfil, roles: ROLE_USER }
         - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/products, roles: ROLE_USER }
+        - { path: ^/recomendaciones, roles: ROLE_USER }
+        - { path: ^/stores, roles: ROLE_USER }
 
-        # Rutas del CRUD de categorías – ADMIN
+        # CRUD categorías – ADMIN
         - { path: ^/category/new, roles: ROLE_ADMIN }
         - { path: ^/category/\d+/edit, roles: ROLE_ADMIN }
         - { path: ^/category/\d+, roles: ROLE_ADMIN }
 
-        # Rutas del CRUD de productos –  ADMIN
+        # CRUD productos – ADMIN
         - { path: ^/product/new, roles: ROLE_ADMIN }
         - { path: ^/product/\d+/edit, roles: ROLE_ADMIN }
         - { path: ^/product/\d+, roles: ROLE_ADMIN }
+        - { path: ^/product, roles: ROLE_ADMIN }
+
+        # Panel admin
+        - { path: ^/admin, roles: ROLE_ADMIN }
+
 
 when@test:
     security:

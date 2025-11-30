@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tiendas cercanas{% endblock %}
+
+{% block body %}
+
+<h1 class="page-title">Tiendas BREKKY cercanas</h1>
+<p class="page-subtitle">
+    Buscá por ciudad, barrio o zona para encontrar la tienda más conveniente.
+</p>
+
+<form method="get" action="{{ path('store_index') }}" class="store-search-bar">
+    <input
+        type="text"
+        name="q"
+        placeholder="Ej: Santa Fe, centro, boulevard..."
+        value="{{ search }}"
+    >
+    <button type="submit" class="btn-brekky">Buscar</button>
+</form>
+
+{% if noResults %}
+    <p style="margin-top:15px;">
+        No encontramos tiendas para <strong>"{{ search }}"</strong>.<br>
+        Probá con otra ciudad o zona, o dejá el campo vacío para ver todas las tiendas.
+    </p>
+{% endif %}
+
+<div class="store-grid">
+    {% for store in stores %}
+        <div class="brekky-card store-card">
+            <div class="store-card-header">
+                <h2>{{ store.name }}</h2>
+                <span class="partner-badge">Convenio Brekky</span>
+            </div>
+
+            <p><strong>Ciudad/Zona:</strong> {{ store.city }} – {{ store.zone }}</p>
+            <p><strong>Dirección:</strong> {{ store.address }}</p>
+            <p><strong>Horarios:</strong> {{ store.hours }}</p>
+
+            <a
+                class="btn-brekky"
+                href="https://www.google.com/maps/search/?api=1&query={{ (store.address ~ ' ' ~ store.city)|url_encode }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                style="margin-top:10px; display:inline-block;"
+            >
+                Ver en mapa
+            </a>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tus recomendaciones{% endblock %}
+
+{% block body %}
+
+<h1 class="page-title">Tus recomendaciones personalizadas</h1>
+<p class="page-subtitle">Estas sugerencias fueron generadas según tus respuestas.</p>
+
+<div style="display:flex; flex-direction:column; gap:25px; max-width:700px;">
+
+    <div class="brekky-card">
+        <h2>Alimentos recomendados</h2>
+        <ul class="brekky-list">
+            {% for food in recommendations.foods %}
+                <li>{{ food }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="brekky-card">
+        <h2>Consejos de hábitos</h2>
+        <ul class="brekky-list">
+            {% for tip in recommendations.tips %}
+                <li>{{ tip }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="brekky-card">
+        <h2>Rutinas de ejercicio</h2>
+        <ul class="brekky-list">
+            {% for ex in recommendations.exercises %}
+                <li>{{ ex }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</div>
+
+<div style="margin-top:30px; display:flex; gap:15px; flex-wrap:wrap;">
+
+    <a class="btn-brekky" href="{{ path('recommendations_survey') }}">
+        Completar otra encuesta
+    </a>
+
+    <button class="btn-back" onclick="window.print();">
+        Imprimir / Guardar PDF
+    </button>
+
+    <a class="btn-back" href="{{ path('app_home') }}">
+        Volver al inicio
+    </a>
+
+</div>
+
+{% endblock %}

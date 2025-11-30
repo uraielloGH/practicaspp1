@@ -1,41 +1,69 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Product index{% endblock %}
+{% block title %}Gestión de productos{% endblock %}
 
 {% block body %}
-    <h1>Product index</h1>
 
-    <table class="table">
+<h1 class="page-title">Gestión de productos</h1>
+<p class="page-subtitle">
+    Desde aquí podés crear, editar o eliminar productos del catálogo Brekky.
+</p>
+
+{# Mensajes flash globales del CRUD (si los usan) #}
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="brekky-card flash-message" style="border-left:4px solid #6F4E37; margin-bottom:15px;">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+<div style="margin-bottom: 20px;">
+    <a href="{{ path('app_product_new') }}" class="btn-brekky">+ Nuevo producto</a>
+</div>
+
+<div class="brekky-card">
+    <table style="width:100%; border-collapse: collapse;">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Image</th>
-                <th>actions</th>
+                <th style="text-align:left; padding:8px;">Nombre</th>
+                <th style="text-align:left; padding:8px;">Precio</th>
+                <th style="text-align:left; padding:8px;">Imagen</th>
+                <th style="text-align:left; padding:8px;">Acciones</th>
             </tr>
         </thead>
         <tbody>
         {% for product in products %}
-            <tr>
-                <td>{{ product.id }}</td>
-                <td>{{ product.name }}</td>
-                <td>{{ product.description }}</td>
-                <td>{{ product.price }}</td>
-                <td>{{ product.image }}</td>
-                <td>
-                    <a href="{{ path('app_product_show', {'id': product.id}) }}">show</a>
-                    <a href="{{ path('app_product_edit', {'id': product.id}) }}">edit</a>
+            <tr style="border-top:1px solid #D9C5A3;">
+                <td style="padding:8px;">{{ product.name }}</td>
+                <td style="padding:8px;">${{ product.price }}</td>
+                <td style="padding:8px;">
+    {% if product.image %}
+        <img src="{{ asset('images/' ~ product.image) }}"
+             alt="{{ product.name }}"
+             style="height:40px; border-radius:6px;">
+    {% else %}
+        <span style="opacity:0.6;">Sin imagen</span>
+    {% endif %}
+</td>
+                <td style="padding:8px;">
+                    <a href="{{ path('app_product_edit', {'id': product.id}) }}" class="btn-brekky" style="padding:6px 12px; font-size:14px;">
+                         Editar
+                    </a>
+
+
+                    {{ include('product/_delete_form.html.twig') }}
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">no records found</td>
+                <td colspan="4" style="padding:10px;">
+                    No hay productos cargados todavía.
+                </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+</div>
 
-    <a href="{{ path('app_product_new') }}">Create new</a>
 {% endblock %}
