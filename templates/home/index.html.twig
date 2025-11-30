@@ -3,4 +3,9 @@
 {% block body %}
 <h1>Bienvenido a Brekky, {{ app.user.nombre }}!</h1>
 <p>Sesión iniciada correctamente.</p>
+
+<a href="{{ path('catalog_categories') }}" 
+   style="padding:10px 20px; background:#4CAF50; color:white; border-radius:5px; text-decoration:none; display:inline-block; margin-top:20px;">
+    Consultar Productos
+</a>
 {% endblock %}

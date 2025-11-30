@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block body %}
+
+<a class="btn-back" href="{{ path('catalog_products_by_category', { id: category.id }) }}">
+    ← Volver a productos
+</a>
+
+
+<h1>{{ product.name }}</h1>
+
+<div style="margin-top:20px;">
+
+    {% if product.image %}
+        <img src="{{ asset('images/' ~ product.image) }}"
+             alt="{{ product.name }}"
+             style="width:300px; height:auto; border-radius:8px;">
+    {% endif %}
+
+</div>
+
+<p><strong>Precio:</strong> ${{ product.price }}</p>
+
+<p><strong>Descripción:</strong></p>
+<p>{{ product.description }}</p>
+
+<p><strong>Categoría:</strong> {{ category.name }}</p>
+
+{% endblock %}

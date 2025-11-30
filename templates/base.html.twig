@@ -3,8 +3,15 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+
+        <link rel="icon" href="data:image/svg+xml,
+            <svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22>
+                <text y=%221.2em%22 font-size=%2296%22>⚫️</text>
+            </svg>">
+
+        {# ==== Archivo CSS Global ==== #}
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
@@ -13,34 +20,62 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
+
     <body>
-    <header>
-        <nav>
-            <a href="{{ path('app_home') }}">Brekky</a>
 
-            {% if app.user %}
-                <a href="{{ path('app_home') }}">Inicio</a>
-                {# Rutas futuras: #}
-                {# <a href="{{ path('app_products') }}">Productos</a> #}
-                {# <a href="{{ path('app_profile') }}">Mi perfil</a> #}
+        {# ===== NAVBAR GLOBAL ===== #}
+        <header>
+            <nav style="
+                background:#f8f8f8;
+                padding:15px;
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                font-size:16px;
+                box-shadow:0 2px 4px rgba(0,0,0,0.1);
+            ">
+                <div style="display:flex; gap:20px; align-items:center;">
+                    <a href="{{ path('app_home') }}" 
+                       style="font-weight:bold; font-size:20px; text-decoration:none; color:#6F4E37;">
+                        Brekky
+                    </a>
 
-                <span>Hola, {{ app.user.nombre }}</span>
-                <a href="{{ path('app_logout') }}">Cerrar sesión</a>
-            {% else %}
-                <a href="{{ path('app_login') }}">Iniciar sesión</a>
-                <a href="{{ path('app_register') }}">Registrarse</a>
-            {% endif %}
-        </nav>
-    </header>
-    {% if app.user %}
-    <div style="background: #eee; padding: 5px; font-size: 12px;">
-        Logueado como: {{ app.user.email }} |
-        Roles: {{ app.user.roles|join(', ') }}
-    </div>
-{% endif %}
+                    {% if app.user %}
+                        <a href="{{ path('app_home') }}">Inicio</a>
+                        <a href="{{ path('catalog_categories') }}">Productos</a>
 
-    <main>
-        {% block body %}{% endblock %}
-    </main>
-</body>
+                        {% if 'ROLE_ADMIN' in app.user.roles %}
+                            <a href="{{ path('product_index') }}">Panel Admin</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+
+                <div style="display:flex; gap:15px; align-items:center;">
+                    {% if app.user %}
+                        <span style="opacity:0.8;">
+                            Hola, {{ app.user.nombre }}
+                        </span>
+                        <a href="{{ path('app_logout') }}">Cerrar sesión</a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}">Iniciar sesión</a>
+                        <a href="{{ path('app_register') }}">Registrarse</a>
+                    {% endif %}
+                </div>
+            </nav>
+        </header>
+
+        {# ===== INFO DE USUARIO LOGUEADO ===== #}
+        {% if app.user %}
+            <div style="background:#eee; padding:5px; font-size:12px;">
+                Logueado como: {{ app.user.email }} |
+                Roles: {{ app.user.roles|join(', ') }}
+            </div>
+        {% endif %}
+
+        {# ===== CONTENIDO PRINCIPAL ===== #}
+        <main style="padding:30px;">
+            {% block body %}{% endblock %}
+        </main>
+
+    </body>
 </html>

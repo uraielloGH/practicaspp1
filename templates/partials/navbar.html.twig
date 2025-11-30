@@ -1,0 +1,15 @@
+<nav style="background:#eee; padding:15px; display:flex; gap:20px;">
+    <a href="{{ path('catalog_categories') }}">Productos</a>
+
+    {% if app.user %}
+        <span>Hola {{ app.user.nombre }}</span>
+
+        {% if 'ROLE_ADMIN' in app.user.roles %}
+            <a href="{{ path('product_index') }}">Panel Admin</a>
+        {% endif %}
+
+        <a href="{{ path('app_logout') }}">Logout</a>
+    {% else %}
+        <a href="{{ path('app_login') }}">Login</a>
+    {% endif %}
+</nav>
