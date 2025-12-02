@@ -20,7 +20,12 @@
             {% endfor %}
         {% endfor %}
 
-        {{ form_start(registrationForm, { attr: { class: 'js-loading-form' } }) }}
+        {{ form_start(registrationForm, {
+            attr: {
+                class: 'js-loading-form',
+                id: 'registration-form'
+            }
+        }) }}
 
             <div class="brekky-form-row">
                 {{ form_label(registrationForm.nombre, 'Nombre completo') }}
@@ -49,7 +54,57 @@
         <p class="auth-secondary">
             ¿Ya tenés cuenta?
             <a href="{{ path('app_login') }}">Iniciá sesión</a>
+            o
+            <a href="{{ path('app_forgot_password') }}">recuperá tu contraseña</a>.
+            {# ajustá el nombre de la ruta si tu forgot-password tiene otro #}
         </p>
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        // FA02: guardar temporalmente los datos de registro (sin contraseña)
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('registration-form');
+            if (!form) return;
+
+            const STORAGE_KEY = 'brekky_registration_draft';
+
+            const nombreInput = form.querySelector('input[name="registration_form[nombre]"]');
+            const emailInput  = form.querySelector('input[name="registration_form[email]"]');
+            // Por seguridad, NO guardamos la contraseña en localStorage
+
+            // 1) Cargar borrador si existe
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    if (nombreInput && data.nombre) nombreInput.value = data.nombre;
+                    if (emailInput && data.email)   emailInput.value  = data.email;
+                }
+            } catch (e) {
+                console.warn('No se pudo leer el borrador de registro', e);
+            }
+
+            // 2) Guardar en cada cambio
+            function saveDraft() {
+                const data = {
+                    nombre: nombreInput ? nombreInput.value : '',
+                    email:  emailInput  ? emailInput.value  : '',
+                };
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            }
+
+            if (nombreInput) nombreInput.addEventListener('input', saveDraft);
+            if (emailInput)  emailInput.addEventListener('input', saveDraft);
+
+            // 3) Al enviar el formulario, borramos el borrador
+            form.addEventListener('submit', function () {
+                localStorage.removeItem(STORAGE_KEY);
+            });
+        });
+    </script>
 {% endblock %}

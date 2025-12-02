@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,18 +28,29 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // Hash del password
-            $password = $form->get('password')->getData();
-            $hashedPassword = $passwordHasher->hashPassword($user, $password);
-            $user->setPassword($hashedPassword);
+            try {
+                // Hash del password
+                $password = $form->get('password')->getData();
+                $hashedPassword = $passwordHasher->hashPassword($user, $password);
+                $user->setPassword($hashedPassword);
 
-            // Guardar usuario en la BD
-            $em->persist($user);
-            $em->flush();
+                // Guardar usuario en la BD
+                $em->persist($user);
+                $em->flush();
 
-            $this->addFlash('success', 'Cuenta creada con éxito.');
+                $this->addFlash('success', 'Cuenta creada con éxito.');
 
-            return $this->redirectToRoute('app_login');
+                return $this->redirectToRoute('app_login');
+
+            } catch (UniqueConstraintViolationException $e) {
+
+                // Fallback si por alguna razón pasa el UniqueEntity (raro pero posible)
+                $this->addFlash('error', 'Ya existe un usuario registrado con este correo electrónico.');
+
+                return $this->render('registration/register.html.twig', [
+                    'registrationForm' => $form->createView(),
+                ]);
+            }
         }
 
         return $this->render('registration/register.html.twig', [
