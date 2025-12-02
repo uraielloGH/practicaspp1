@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Controlador responsable del caso de uso CU001 - Registrarse.
  *
- * Flujo principal (según diagrama de secuencia):
+ * Flujo principal:
  *  - GET /register: mostrar formulario de registro.
  *  - POST /register: procesar datos, validar y, si son válidos,
  *    persistir el nuevo usuario y redirigir al login con mensaje de éxito.

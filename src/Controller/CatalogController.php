@@ -14,7 +14,7 @@ class CatalogController extends AbstractController
      * CU003 – Paso 1:
      * Mostrar todas las categorías disponibles para que el usuario elija.
      *
-     * El usuario entra a /catalog → buscamos todas las categorías en la BD
+     * El usuario entra a /catalog y buscamos todas las categorías en la BD
      * y se las pasamos al template categories.html.twig para que las liste.
      */
     #[Route('/catalog', name: 'catalog_categories')]
