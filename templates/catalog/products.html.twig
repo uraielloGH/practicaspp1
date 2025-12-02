@@ -3,18 +3,18 @@
 {% block title %}Productos - {{ category.name }}{% endblock %}
 
 {% block body %}
-<h1>Productos de {{ category.name }}</h1>
+<h1 class="page-title">Productos de {{ category.name }}</h1>
 
 <a class="btn-back" href="{{ path('catalog_categories') }}">← Volver a categorías</a>
 
-<div style="display:flex; gap:20px; flex-wrap:wrap; margin-top:20px;">
+<div class="catalog-container" style="margin-top: 20px;">
     {% for product in products %}
-        <div style="border:1px solid #ccc; padding:15px; width:220px; border-radius:8px;">
-            
+        <article class="catalog-card">
             {% if product.image %}
-                <img src="{{ asset('images/' ~ product.image) }}" 
-                     alt="{{ product.name }}" 
-                     style="width:100%; height:auto; border-radius:5px;">
+                <img
+                    src="{{ asset('images/' ~ product.image) }}"
+                    alt="{{ product.name }}"
+                >
             {% endif %}
 
             <h3>{{ product.name }}</h3>
@@ -22,14 +22,13 @@
             <p><strong>${{ product.price }}</strong></p>
 
             <a class="btn-brekky" href="{{ path('catalog_product_detail', { id: product.id }) }}">
-    Ver detalle →
-</a>
-
+                Ver detalle →
+            </a>
+        </article>
+    {% else %}
+        <div class="brekky-card" style="grid-column: 1 / -1;">
+            No hay productos en esta categoría.
         </div>
     {% endfor %}
-
-    {% if products is empty %}
-        <p>No hay productos en esta categoría.</p>
-    {% endif %}
 </div>
 {% endblock %}

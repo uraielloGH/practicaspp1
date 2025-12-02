@@ -36,9 +36,10 @@ security:
 
     # PROTECCIÓN DE RUTAS
     access_control:
+        # Rutas públicas
+        - { path: ^/home, roles: PUBLIC_ACCESS }
 
         # Rutas solo para usuarios logueados
-        - { path: ^/home, roles: ROLE_USER }
         - { path: ^/perfil, roles: ROLE_USER }
         - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/products, roles: ROLE_USER }

@@ -19,12 +19,12 @@ class ProductType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('category', EntityType::class, [
-    'class' => Category::class,
-    'choice_label' => 'name', // o 'nombre' si tu entidad usa español
-    'placeholder' => 'Seleccioná una categoría',
-    'label' => 'Categoría',
-])
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'choice_label' => 'name', // o 'nombre' si tu entidad usa español
+                'placeholder' => 'Seleccioná una categoría',
+                'label' => 'Categoría',
+            ])
 
             ->add('name', TextType::class, [
                 'label' => 'Nombre del producto',
@@ -73,6 +73,17 @@ class ProductType extends AbstractType
                 ],
             ])
 
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'choice_label' => 'name', 
+                'placeholder' => 'Seleccioná una categoría',
+                'label' => 'Categoría',
+                'constraints' => [
+                    new Assert\NotNull([
+                        'message' => 'Seleccioná una categoría para el producto.',
+                    ]),
+                ],
+            ])
 
         ;
     }

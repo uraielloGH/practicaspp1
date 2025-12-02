@@ -1,31 +1,74 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Iniciar sesión - Brekky{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+<div class="auth-wrapper">
+    <div class="auth-card brekky-card">
+        <h1 class="page-title">Iniciar sesión</h1>
+        <p class="page-subtitle">
+            Accedé a tu cuenta para ver tus recomendaciones, productos y tiendas cercanas.
+        </p>
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-        </div>
-    {% endif %}
+        {# Mensaje de error de Symfony Security (si hubo fallo al loguear) #}
+        {% if error %}
+            <div class="flash-message brekky-card" style="margin-bottom: 10px;">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+        {# Si ya está logueado, se puede avisar o redirigir desde el controlador #}
+        {% if app.user %}
+            <p class="auth-secondary" style="margin-bottom: 1.5rem;">
+                Ya estás logueado como <strong>{{ app.user.userIdentifier }}</strong>.
+            </p>
+        {% endif %}
 
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
+        <form method="post" class="js-loading-form">
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
+            <div class="brekky-form-row">
+                <label for="inputEmail">Correo electrónico</label>
+                <input
+                    type="email"
+                    id="inputEmail"
+                    name="email"
+                    value="{{ last_username }}"
+                    required
+                    autofocus
+                >
+            </div>
+
+            <div class="brekky-form-row">
+                <label for="inputPassword">Contraseña</label>
+                <input
+                    type="password"
+                    id="inputPassword"
+                    name="password"
+                    required
+                >
+            </div>
+
+            <div class="brekky-form-row" style="display:flex; justify-content:space-between; align-items:center; gap:10px; font-size:0.9rem;">
+                <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                    <input type="checkbox" name="_remember_me">
+                    Recordarme
+                </label>
+
+                <a href="{{ path('app_forgot_password') }}">¿Olvidaste tu contraseña?</a>
+            </div>
+
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <button class="btn-brekky" type="submit">
+                Iniciar sesión
+            </button>
+        </form>
+
+        <p class="auth-secondary">
+            ¿Todavía no tenés cuenta?
+            <a href="{{ path('app_register') }}">Registrate</a>
+        </p>
+    </div>
+</div>
 {% endblock %}

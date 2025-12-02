@@ -9,8 +9,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 #[Route('/product')]
+#[IsGranted('ROLE_ADMIN')] // solo administradores pueden acceder a este controlador
 class ProductController extends AbstractController
 {
     #[Route('/', name: 'app_product_index', methods: ['GET'])]
@@ -31,12 +33,15 @@ class ProductController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $productRepository->save($product, true);
 
+            // Mensaje de éxito para el CU
+            $this->addFlash('success', 'Producto creado correctamente.');
+
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('product/new.html.twig', [
+        return $this->render('product/new.html.twig', [
             'product' => $product,
-            'form' => $form,
+            'form'    => $form->createView(),
         ]);
     }
 
@@ -57,12 +62,15 @@ class ProductController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $productRepository->save($product, true);
 
+            // Mensaje de éxito
+            $this->addFlash('success', 'Producto actualizado correctamente.');
+
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('product/edit.html.twig', [
+        return $this->render('product/edit.html.twig', [
             'product' => $product,
-            'form' => $form,
+            'form'    => $form->createView(),
         ]);
     }
 
@@ -71,6 +79,10 @@ class ProductController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
             $productRepository->remove($product, true);
+            $this->addFlash('success', 'Producto eliminado correctamente.');
+        } else {
+            // por si alguna vez falla el token
+            $this->addFlash('error', 'No se pudo eliminar el producto. Intentá nuevamente.');
         }
 
         return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);

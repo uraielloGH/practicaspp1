@@ -1,15 +1,55 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Registrarse{% endblock %}
+{% block title %}Crear cuenta - Brekky{% endblock %}
 
 {% block body %}
-    <h1>Crear cuenta</h1>
+<div class="auth-wrapper">
+    <div class="auth-card brekky-card">
+        <h1 class="page-title">Crear cuenta</h1>
+        <p class="page-subtitle">
+            Registrate para empezar a recibir recomendaciones personalizadas
+            y guardar tus preferencias en Brekky.
+        </p>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.nombre) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.password) }}
+        {# Mensajes flash por si hay #}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash-message brekky-card" style="margin-bottom: 10px;">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
 
-        <button class="btn btn-primary">Registrarse</button>
-    {{ form_end(registrationForm) }}
+        {{ form_start(registrationForm, { attr: { class: 'js-loading-form' } }) }}
+
+            <div class="brekky-form-row">
+                {{ form_label(registrationForm.nombre, 'Nombre completo') }}
+                {{ form_widget(registrationForm.nombre) }}
+                {{ form_errors(registrationForm.nombre) }}
+            </div>
+
+            <div class="brekky-form-row">
+                {{ form_label(registrationForm.email, 'Correo electrónico') }}
+                {{ form_widget(registrationForm.email) }}
+                {{ form_errors(registrationForm.email) }}
+            </div>
+
+            <div class="brekky-form-row">
+                {{ form_label(registrationForm.password, 'Contraseña') }}
+                {{ form_widget(registrationForm.password) }}
+                {{ form_errors(registrationForm.password) }}
+            </div>
+
+            <button type="submit" class="btn-brekky">
+                Registrarse
+            </button>
+
+        {{ form_end(registrationForm) }}
+
+        <p class="auth-secondary">
+            ¿Ya tenés cuenta?
+            <a href="{{ path('app_login') }}">Iniciá sesión</a>
+        </p>
+    </div>
+</div>
 {% endblock %}

@@ -13,25 +13,22 @@
     </div>
 
     <div class="brekky-form-row">
-    {{ form_row(form.image) }}
-    <small style="font-size: 12px; opacity: .7;">
-        Ejemplo: cafe1.jpg (debe existir en la carpeta public/images)
-    </small>
+        {{ form_row(form.image) }}
+        <small style="font-size: 12px; opacity: .7;">
+            Ejemplo: cafe1.jpg (debe existir en la carpeta public/images)
+        </small>
+    </div>
 
     <div class="brekky-form-row">
-    {{ form_row(form.category) }}
-</div>
-
-</div>
-
+        {{ form_row(form.category) }}
+    </div>
 
     <button class="btn-brekky">
         {{ button_label|default('Guardar') }}
     </button>
 
     <a href="{{ path('app_product_index') }}" class="btn-back" style="margin-left:10px;">
-    Cancelar
+        Cancelar
     </a>
-
 
 {{ form_end(form) }}

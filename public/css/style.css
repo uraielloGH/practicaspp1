@@ -1,8 +1,8 @@
-/* ======== TEMA CAFETERÍA ======== */
+/* ======== TEMA CAFETERÍA GLOBAL ======== */
 body {
-    background: #F5EBDD;
-    font-family: Arial, sans-serif;
-    color: #4A3B32;
+    background: #F5EDE0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #3E2723;
     margin: 0;
     padding: 0;
 }
@@ -13,7 +13,7 @@ h1, h2, h3 {
     font-weight: bold;
 }
 
-/* ======== GRID ======== */
+/* ======== GRID CATÁLOGO ======== */
 .catalog-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -21,7 +21,7 @@ h1, h2, h3 {
     margin-top: 30px;
 }
 
-/* ======== CARD ======== */
+/* ======== CARD DE CATÁLOGO ======== */
 .catalog-card {
     background: #FFFFFF;
     border-radius: 12px;
@@ -44,7 +44,7 @@ h1, h2, h3 {
     border-radius: 10px;
 }
 
-/* ======== BOTONES ======== */
+/* ======== BOTONES GENÉRICOS ======== */
 .btn {
     padding: 10px 18px;
     background: #6F4E37;
@@ -60,34 +60,71 @@ h1, h2, h3 {
     background: #8B5E3C;
     transform: scale(1.03);
 }
+
 /* ======== BOTONES BREKKY ======== */
 .btn-brekky {
-    background: #6F4E37;          /* café fuerte */
-    color: white;
-    padding: 10px 18px;
-    border-radius: 6px;
-    font-weight: bold;
+    background: #6F4E37;        /* café fuerte */
+    color: #FFFFFF !important;
+    padding: 10px 20px;
+    border-radius: 999px;
+    font-weight: 600;
     display: inline-block;
-    transition: 0.25s ease;
     text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
 }
 
 .btn-brekky:hover {
-    background: #8B5E3C;          /* café más claro */
-    transform: translateY(-2px);
+    background: #563a28;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+
+/* Botón secundario/outline */
+.btn-brekky--outline {
+    background: transparent;
+    color: #3E2723 !important;
+    padding: 10px 20px;
+    border-radius: 999px;
+    font-weight: 600;
+    border: 2px solid #3E2723;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-brekky--outline:hover {
+    background: #3E2723;
+    color: #FFFFFF !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
 }
 
 /* Botón secundario (volver atrás) */
 .btn-back {
-    background: #C19A6B;          /* color latte */
-    color: #3B2A20;
-    padding: 8px 14px;
-    border-radius: 6px;
-    font-weight: bold;
-    display: inline-block;
-    transition: 0.25s ease;
+    background: #C19A6B;
+    color: #3B2A20 !important;
+    padding: 0.55rem 1.3rem;
+    border-radius: 999px;           /* ← pill */
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
     text-decoration: none;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    transition: 0.2s ease;
 }
+
+.btn-back:hover {
+    background: #D8B892;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
 
 .btn-back:hover {
     background: #D8B892;
@@ -103,16 +140,7 @@ h1, h2, h3 {
     box-shadow: 0 5px 15px rgba(0,0,0,0.15);
 }
 
-/* ======== ESTILO BREKKY CAFETERÍA ======== */
-
-/* Fondo general */
-body {
-    background: #F5EDE0;
-    font-family: 'Segoe UI', sans-serif;
-    color: #3E2723;
-}
-
-/* ---- TITULOS ---- */
+/* ======== TIPOGRAFÍA PÁGINAS ======== */
 .page-title {
     font-size: 32px;
     font-weight: bold;
@@ -126,7 +154,7 @@ body {
     margin-bottom: 25px;
 }
 
-/* ---- CARDS ---- */
+/* ======== CARDS GENERALES ======== */
 .brekky-card {
     background: #FAF7F2;
     border: 1px solid #D9C5A3;
@@ -141,7 +169,7 @@ body {
     margin-bottom: 10px;
 }
 
-/* ---- FORMULARIO ---- */
+/* ======== FORMULARIOS ======== */
 .brekky-form-row {
     margin-bottom: 18px;
 }
@@ -153,7 +181,10 @@ body {
 }
 
 .brekky-form-row select,
-.brekky-form-row textarea {
+.brekky-form-row textarea,
+.brekky-form-row input[type="text"],
+.brekky-form-row input[type="email"],
+.brekky-form-row input[type="password"] {
     width: 100%;
     padding: 10px;
     border: 1px solid #C19A6B;
@@ -163,37 +194,6 @@ body {
 
 .brekky-form-row textarea {
     resize: none;
-}
-
-/* ---- BOTONES ---- */
-.btn-brekky {
-    background: #6F4E37;
-    color: white !important;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    display: inline-block;
-    transition: 0.2s;
-}
-
-.btn-brekky:hover {
-    background: #563a28;
-}
-
-.btn-back {
-    background: #C19A6B;
-    color: white !important;
-    padding: 10px 18px;
-    border-radius: 8px;
-    text-decoration: none;
-    display: inline-block;
-    transition: 0.2s;
-}
-
-.btn-back:hover {
-    background: #a68055;
 }
 
 /* Listas más lindas */
@@ -297,4 +297,180 @@ body {
     }
 }
 
+/* ======== HERO Y SECCIONES HOME ======== */
 
+.brekky-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+    padding: 3.5rem 4rem;
+}
+
+.brekky-hero__content {
+    flex: 1;
+}
+
+.brekky-hero__subtitle {
+    font-size: 1.05rem;
+    margin-top: 0.75rem;
+    max-width: 40rem;
+}
+
+.brekky-hero__welcome {
+    margin-top: 1rem;
+    color: #5a4635;
+}
+
+.brekky-hero__actions {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.brekky-hero__image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.brekky-hero__image img {
+    max-width: 420px;
+    width: 100%;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* Secciones inferiores */
+.brekky-section {
+    padding: 2.5rem 4rem;
+}
+
+.brekky-section h2 {
+    margin-bottom: 0.75rem;
+}
+
+.brekky-section--grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+}
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 900px) {
+    .brekky-hero {
+        flex-direction: column-reverse;
+        padding: 2rem 1.5rem;
+        text-align: center;
+    }
+
+    .brekky-section {
+        padding: 2rem 1.5rem;
+    }
+
+    .brekky-section--grid {
+        grid-template-columns: 1fr;
+    }
+
+    .brekky-hero__actions {
+        justify-content: center;
+    }
+}
+
+.brekky-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 3rem;
+}
+
+/* NAVBAR */
+
+.main-nav__user {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+
+.main-nav {
+    background: #FFF7EC;
+    border-bottom: 1px solid #E0D2BF;
+}
+
+.main-nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+}
+
+.main-nav__brand a {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #6F4E37;
+    text-decoration: none;
+}
+
+.main-nav__links {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    font-size: 0.95rem;
+}
+
+.main-nav__links a {
+    color: #4A3B32;
+    text-decoration: none;
+}
+
+.main-nav__links a:hover {
+    color: #6F4E37;
+}
+
+.main-nav__button {
+    background: #6F4E37;
+    color: #FFFFFF !important;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.brekky-hero-image {
+    width: 100%;
+    max-width: 900px;
+    border-radius: 16px;
+    display: block;
+    margin: 25px auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+/* ====== PÁGINAS DE AUTENTICACIÓN (login / register) ====== */
+
+.auth-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+
+.auth-card {
+    max-width: 480px;
+    width: 100%;
+}
+
+.auth-secondary {
+    margin-top: 1.2rem;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.auth-secondary a {
+    color: #6F4E37;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-secondary a:hover {
+    text-decoration: underline;
+}

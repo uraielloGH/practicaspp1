@@ -32,7 +32,11 @@
         </div>
 
         <div class="brekky-form-row">
-            {{ form_row(profileForm.plainPassword) }}
+            {{ form_row(profileForm.plainPassword.first) }}
+        </div>
+
+        <div class="brekky-form-row">
+            {{ form_row(profileForm.plainPassword.second) }}
         </div>
 
         <button type="submit" class="btn-brekky">

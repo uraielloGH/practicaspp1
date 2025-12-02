@@ -44,15 +44,22 @@ class StoreController extends AbstractController
             ],
         ];
 
+        // Saber si el usuario hizo "submit" (hay parámetro q en la URL)
+        $searchParamExists = $request->query->has('q');
         $search = trim((string) $request->query->get('q', ''));
 
-        // Si no hay búsqueda → mostrar todas
-        // Si hay búsqueda → filtrar
         $filteredStores = [];
+        $searchError = null;
 
-        if ($search === '') {
+        if ($searchParamExists && $search === '') {
+            // E1 – el usuario apretó Buscar sin escribir nada
+            $searchError = 'Por favor ingresá una ciudad, barrio o zona válida.';
+            $filteredStores = $stores; // o [] si preferís no mostrar nada
+        } elseif ($search === '') {
+            // carga inicial sin búsqueda → mostrar todas
             $filteredStores = $stores;
         } else {
+            // hay texto de búsqueda → filtramos
             $searchLower = mb_strtolower($search);
 
             foreach ($stores as $store) {
@@ -68,9 +75,10 @@ class StoreController extends AbstractController
         }
 
         return $this->render('store/index.html.twig', [
-            'stores'    => $filteredStores,
-            'search'    => $search,
-            'noResults' => $search !== '' && count($filteredStores) === 0,
+            'stores'      => $filteredStores,
+            'search'      => $search,
+            'noResults'   => $search !== '' && count($filteredStores) === 0,
+            'searchError' => $searchError,
         ]);
     }
 }

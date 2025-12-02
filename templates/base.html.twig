@@ -1,99 +1,89 @@
+{# templates/base.html.twig #}
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,
-            <svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22>
-                <text y=%221.2em%22 font-size=%2296%22>⚫️</text>
-            </svg>">
-        
-        {# ==== Archivo CSS Global ==== #}
+        <title>{% block title %}¡Bienvenido! - Inicio Brekky{% endblock %}</title>
+
+        <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+
+        {# ==== CSS global ==== #}
         <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
+    </head>
+
+    <body>
+
+        {# ===== NAVBAR GLOBAL ===== #}
+        <header class="main-nav">
+            <div class="brekky-container main-nav__inner">
+
+                <div class="main-nav__brand">
+                    <a href="{{ path('app_home') }}">Brekky</a>
+                </div>
+
+                <nav class="main-nav__links">
+                    {# enlaces de navegación principales #}
+                    {% if app.user %}
+                        <a href="{{ path('app_home') }}">Inicio</a>
+                        <a href="{{ path('catalog_categories') }}">Productos</a>
+                        <a href="{{ path('recommendations_survey') }}">Recomendaciones</a>
+                        <a href="{{ path('store_index') }}">Tiendas cercanas</a>
+                        <a href="{{ path('profile_edit') }}">Mi perfil</a>
+
+                        {% if 'ROLE_ADMIN' in app.user.roles %}
+                            <a href="{{ path('app_product_index') }}">Panel Admin</a>
+                        {% endif %}
+                    {% else %}
+                        {# Lo que puede ver alguien NO logueado #}
+                        <a href="{{ path('app_home') }}">Inicio</a>
+                        <a href="{{ path('store_index') }}">Tiendas cercanas</a>
+                    {% endif %}
+
+                    {# zona derecha: usuario / login / registro #}
+                    {% if app.user %}
+                        <span class="main-nav__user">
+                            Hola, {{ app.user.nombre }}
+                        </span>
+                        <a href="{{ path('app_logout') }}" class="main-nav__button">
+                            Cerrar sesión
+                        </a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}">Iniciar sesión</a>
+                        <a href="{{ path('app_register') }}" class="main-nav__button">
+                            Registrarse
+                        </a>
+                    {% endif %}
+                </nav>
+            </div>
+        </header>
+
+        {# ===== CONTENIDO PRINCIPAL ===== #}
+        <main>
+            <div class="brekky-container">
+                {% block body %}{% endblock %}
+            </div>
+        </main>
 
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-        <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('form.js-loading-form').forEach(function (form) {
-                form.addEventListener('submit', function () {
-                    const btn = form.querySelector('button[type="submit"]');
-                    if (btn) {
-                        btn.classList.add('btn-loading');
-                        btn.disabled = true;
-                    }
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    document.querySelectorAll('form.js-loading-form').forEach(function (form) {
+                        form.addEventListener('submit', function () {
+                            const btn = form.querySelector('button[type="submit"]');
+                            if (btn) {
+                                btn.classList.add('btn-loading');
+                                btn.disabled = true;
+                            }
+                        });
+                    });
                 });
-            });
-        });
-    </script>
-</body>
-</html>
-
-    <body>
-        {# ===== NAVBAR GLOBAL ===== #}
-        <header>
-            <nav style="
-                background:#f8f8f8;
-                padding:15px;
-                display:flex;
-                justify-content:space-between;
-                align-items:center;
-                font-size:16px;
-                box-shadow:0 2px 4px rgba(0,0,0,0.1);
-            ">
-                <div style="display:flex; gap:20px; align-items:center;">
-                    <a href="{{ path('app_home') }}" 
-                       style="font-weight:bold; font-size:20px; text-decoration:none; color:#6F4E37;">
-                        Brekky
-                    </a>
-
-                    {% if app.user %}
-    <a href="{{ path('app_home') }}">Inicio</a>
-    <a href="{{ path('catalog_categories') }}">Productos</a>
-    <a href="{{ path('recommendations_survey') }}">Recomendaciones</a>
-    <a href="{{ path('store_index') }}">Tiendas cercanas</a>
-    <a href="{{ path('profile_edit') }}">Mi perfil</a>
-
-   {% if 'ROLE_ADMIN' in app.user.roles %}
-    <a href="{{ path('app_product_index') }}">Panel Admin</a>
-{% endif %}
-
-{% endif %}
-
-
-                </div>
-
-                <div style="display:flex; gap:15px; align-items:center;">
-                    {% if app.user %}
-                        <span style="opacity:0.8;">
-                            Hola, {{ app.user.nombre }}
-                        </span>
-                        <a href="{{ path('app_logout') }}">Cerrar sesión</a>
-                    {% else %}
-                        <a href="{{ path('app_login') }}">Iniciar sesión</a>
-                        <a href="{{ path('app_register') }}">Registrarse</a>
-                    {% endif %}
-                </div>
-            </nav>
-        </header>
-
-        {# ===== INFO DE USUARIO LOGUEADO ===== #}
-        {% if app.user %}
-            <div style="background:#eee; padding:5px; font-size:12px;">
-                Logueado como: {{ app.user.email }} |
-                Roles: {{ app.user.roles|join(', ') }}
-            </div>
-        {% endif %}
-
-        {# ===== CONTENIDO PRINCIPAL ===== #}
-        <main style="padding:30px;">
-            {% block body %}{% endblock %}
-        </main>
+            </script>
+        {% endblock %}
     </body>
 </html>

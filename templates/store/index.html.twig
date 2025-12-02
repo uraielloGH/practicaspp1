@@ -19,6 +19,13 @@
     <button type="submit" class="btn-brekky">Buscar</button>
 </form>
 
+{% if searchError %}
+    <p class="flash-message" style="margin-top:10px; color:#b53;">
+        {{ searchError }}
+    </p>
+{% endif %}
+
+
 {% if noResults %}
     <p style="margin-top:15px;">
         No encontramos tiendas para <strong>"{{ search }}"</strong>.<br>

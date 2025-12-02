@@ -1,11 +1,70 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-<h1>Bienvenido a Brekky, {{ app.user.nombre }}!</h1>
-<p>Sesión iniciada correctamente.</p>
+{% block title %}Bienvenido a Brekky{% endblock %}
 
-<a href="{{ path('catalog_categories') }}" 
-   style="padding:10px 20px; background:#4CAF50; color:white; border-radius:5px; text-decoration:none; display:inline-block; margin-top:20px;">
-    Consultar Productos
-</a>
+{% block body %}
+
+<div class="brekky-hero">
+    <div class="brekky-hero__content">
+        <h1>Bienvenido a Brekky</h1>
+        <p class="brekky-hero__subtitle">
+            Brekky es una plataforma diseñada para ayudarte a mejorar tus desayunos y meriendas
+            con bebidas saludables, recomendaciones personalizadas y tiendas cercanas.
+        </p>
+
+        {% if app.user %}
+            <p class="brekky-hero__welcome">
+                Hola {{ app.user.nombre }} 👋 Ya podés seguir explorando el catálogo y tus recomendaciones.
+            </p>
+            <div class="brekky-hero__actions">
+                <a href="{{ path('catalog_categories') }}" class="btn-brekky">Consultar productos</a>
+                <a href="{{ path('recommendations_survey') }}" class="btn-brekky--outline">Obtener recomendaciones</a>
+            </div>
+        {% else %}
+            <p class="brekky-hero__welcome">
+                Creá tu perfil, contanos tus hábitos y recibí ideas simples para arrancar el día con más energía.
+            </p>
+            <div class="brekky-hero__actions">
+                <a href="{{ path('app_register') }}" class="btn-brekky">Registrarse</a>
+                <a href="{{ path('app_login') }}" class="btn-brekky--outline">Iniciar sesión</a>
+                <a href="{{ path('store_index') }}" class="btn-brekky--outline">Ver tiendas cercanas</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="brekky-hero__image">
+        <img src="{{ asset('images/home-breakfast.png') }}" 
+        alt="Desayuno saludable"
+     class="brekky-hero-image">
+
+    </div>
+</div>
+
+<section class="brekky-section">
+    <h2>Nuestra historia</h2>
+    <p>
+        Brekky nació con una idea sencilla: que el desayuno y la merienda no sean un apuro,
+        sino un momento para cuidarse. A partir de recetas saludables y bebidas equilibradas,
+        fuimos creando una experiencia digital donde cada persona puede encontrar opciones
+        que se adapten a su rutina.
+    </p>
+</section>
+
+<section class="brekky-section brekky-section--grid">
+    <article class="brekky-card">
+        <h3>Elegí tus bebidas</h3>
+        <p>Explorá el catálogo de bebidas y acompañamientos saludables, organizados por categoría.</p>
+    </article>
+
+    <article class="brekky-card">
+        <h3>Recibí recomendaciones</h3>
+        <p>Completá una encuesta rápida y obtené sugerencias de alimentos, hábitos y ejercicios.</p>
+    </article>
+
+    <article class="brekky-card">
+        <h3>Encontrá tiendas cercanas</h3>
+        <p>Buscá las tiendas Brekky por ciudad o barrio y abrí la ubicación en Google Maps.</p>
+    </article>
+</section>
+
 {% endblock %}
