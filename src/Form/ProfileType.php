@@ -17,6 +17,7 @@ class ProfileType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            // Nombre que se muestra en el perfil
             ->add('nombre', TextType::class, [
                 'label' => 'Nombre',
                 'constraints' => [
@@ -29,6 +30,8 @@ class ProfileType extends AbstractType
                     ]),
                 ],
             ])
+
+            // Email de contacto y login
             ->add('email', EmailType::class, [
                 'label' => 'Correo electrónico',
                 'constraints' => [
@@ -40,10 +43,14 @@ class ProfileType extends AbstractType
                     ]),
                 ],
             ])
+
+            // Cambio de contraseña opcional
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'mapped' => false,          // NO se guarda directo en la entidad User
-                'required' => false,        // el usuario la puede dejar vacía
+                // No se guarda directo en la entidad, solo usamos el valor para hacer el hash
+                'mapped' => false,
+                // El usuario puede dejar esto vacío si no quiere cambiar la contraseña
+                'required' => false,
                 'invalid_message' => 'Las contraseñas deben coincidir.',
                 'first_options'  => [
                     'label' => 'Nueva contraseña (opcional)',
@@ -60,8 +67,8 @@ class ProfileType extends AbstractType
                         'placeholder' => 'Volvé a escribir la nueva contraseña',
                     ],
                 ],
+                // Acepta vacío (sin cambio) o una contraseña que cumpla las reglas de seguridad
                 'constraints' => [
-                    // Permite vacío (no cambio) o contraseña fuerte (RN02)
                     new Assert\Regex([
                         'pattern' => '/^$|^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/',
                         'message' => 'La contraseña debe tener al menos 8 caracteres e incluir mayúscula, minúscula, número y un carácter especial.',
@@ -73,6 +80,7 @@ class ProfileType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
+        // El formulario trabaja directo sobre la entidad User
         $resolver->setDefaults([
             'data_class' => User::class,
         ]);

@@ -1,3 +1,4 @@
+{# Vista de edición de producto (CU007) #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Editar producto{% endblock %}
@@ -9,8 +10,13 @@
     Modificá la información del producto seleccionado.
 </p>
 
+{# Contenedor principal del formulario de edición #}
 <div class="brekky-card" style="max-width:700px;">
-    {{ include('product/_form.html.twig', {'form': form, 'button_label': 'Guardar cambios'}) }}
+    {# Usamos el mismo formulario parcial, pero con otro texto de botón #}
+    {{ include('product/_form.html.twig', {
+        form: form,
+        button_label: 'Guardar cambios'
+    }) }}
 </div>
 
 {% endblock %}

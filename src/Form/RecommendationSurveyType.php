@@ -10,9 +10,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RecommendationSurveyType extends AbstractType
 {
+    /**
+     * Formulario de encuesta para generar recomendaciones de desayuno en Brekky
+     *
+     * Cada campo es una pregunta que después usamos en RecommendationController::generateRecommendations()
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            // Pregunta sobre cuánto se mueve la persona en el día
             ->add('activityLevel', ChoiceType::class, [
                 'label' => 'Nivel de actividad física',
                 'choices' => [
@@ -23,6 +29,8 @@ class RecommendationSurveyType extends AbstractType
                 'placeholder' => 'Seleccioná una opción',
                 'required' => true,
             ])
+
+            // Objetivo principal que la persona tiene con el desayuno
             ->add('mainGoal', ChoiceType::class, [
                 'label' => 'Objetivo principal',
                 'choices' => [
@@ -33,6 +41,8 @@ class RecommendationSurveyType extends AbstractType
                 'placeholder' => 'Seleccioná una opción',
                 'required' => true,
             ])
+
+            // Qué tipo de sabor prefiere para el desayuno
             ->add('flavorPreference', ChoiceType::class, [
                 'label' => 'Preferencia de sabor',
                 'choices' => [
@@ -43,6 +53,8 @@ class RecommendationSurveyType extends AbstractType
                 'placeholder' => 'Seleccioná una opción',
                 'required' => true,
             ])
+
+            // Si tiene alguna restricción alimentaria
             ->add('restriction', ChoiceType::class, [
                 'label' => 'Restricciones alimentarias',
                 'choices' => [
@@ -53,6 +65,8 @@ class RecommendationSurveyType extends AbstractType
                 'placeholder' => 'Seleccioná una opción',
                 'required' => true,
             ])
+
+            // Qué lugar le da al desayuno en su rutina diaria
             ->add('breakfastImportance', ChoiceType::class, [
                 'label' => 'Qué tan importante es el desayuno para vos',
                 'choices' => [
@@ -63,6 +77,8 @@ class RecommendationSurveyType extends AbstractType
                 'placeholder' => 'Seleccioná una opción',
                 'required' => true,
             ])
+
+            // Campo libre por si quiere agregar algún comentario extra
             ->add('notes', TextareaType::class, [
                 'label' => 'Comentarios adicionales (opcional)',
                 'required' => false,
@@ -76,6 +92,7 @@ class RecommendationSurveyType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
+        // Este formulario no está ligado a una entidad, usamos un array simple
         $resolver->setDefaults([
             'data_class' => null,
         ]);

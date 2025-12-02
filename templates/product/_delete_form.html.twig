@@ -1,7 +1,15 @@
-<form method="post" action="{{ path('app_product_delete', {'id': product.id}) }}" style="display:inline;" onsubmit="return confirm('¿Seguro que querés eliminar este producto?');">
+{# Formulario de eliminación de producto (CU007) #}
+<form
+    method="post"
+    action="{{ path('app_product_delete', {'id': product.id}) }}"
+    style="display:inline;"
+    onsubmit="return confirm('¿Seguro que querés eliminar este producto?');"
+>
+    {# Token CSRF para proteger la acción de borrado #}
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
+
+    {# Botón de eliminación, estilizado como botón de acción secundaria/peligrosa #}
     <button class="btn-back" style="padding:6px 12px; font-size:14px; background:#b3261e;">
         Eliminar
     </button>
 </form>
-

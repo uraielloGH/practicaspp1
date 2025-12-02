@@ -4,17 +4,29 @@
 
 {% block body %}
 
+{# Vista del CU003 – Paso 1:
+   El usuario entra al catálogo y ve todas las categorías disponibles.
+   Acá simplemente recorremos la lista que nos manda el controlador
+   (CatalogController::categories) y mostramos cada categoría. #}
+
 <h2>Categorías disponibles</h2>
 
 <div class="catalog-container">
 
+    {# Recorremos todas las categorías traídas desde CategoryRepository.findAll() #}
     {% for category in categories %}
         <div class="catalog-card">
+
+            {# Nombre y descripción de la categoría #}
             <h3>{{ category.name }}</h3>
             <p>{{ category.description }}</p>
 
-            <a class="btn-brekky" href="{{ path('catalog_products_by_category', { id: category.id }) }}">
-            Ver productos
+            {# Botón para pasar al Paso 2 del CU003:
+               listar los productos de esa categoría.
+               Va a /catalog/category/{id} #}
+            <a class="btn-brekky"
+               href="{{ path('catalog_products_by_category', { id: category.id }) }}">
+               Ver productos
             </a>
 
         </div>

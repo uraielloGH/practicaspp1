@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Product;
+use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -11,21 +12,26 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use App\Entity\Category;
-
 
 class ProductType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            // Categoría a la que pertenece el producto
             ->add('category', EntityType::class, [
                 'class' => Category::class,
-                'choice_label' => 'name', // o 'nombre' si tu entidad usa español
+                'choice_label' => 'name',
                 'placeholder' => 'Seleccioná una categoría',
                 'label' => 'Categoría',
+                'constraints' => [
+                    new Assert\NotNull([
+                        'message' => 'Seleccioná una categoría para el producto.',
+                    ]),
+                ],
             ])
 
+            // Nombre comercial del producto
             ->add('name', TextType::class, [
                 'label' => 'Nombre del producto',
                 'constraints' => [
@@ -38,6 +44,8 @@ class ProductType extends AbstractType
                     ]),
                 ],
             ])
+
+            // Descripción breve para mostrar en el catálogo
             ->add('description', TextareaType::class, [
                 'label' => 'Descripción',
                 'constraints' => [
@@ -49,6 +57,8 @@ class ProductType extends AbstractType
                     'rows' => 4,
                 ],
             ])
+
+            // Precio del producto en ARS
             ->add('price', MoneyType::class, [
                 'label' => 'Precio',
                 'currency' => 'ARS',
@@ -61,6 +71,8 @@ class ProductType extends AbstractType
                     ]),
                 ],
             ])
+
+            // Nombre del archivo de imagen dentro de /public/images
             ->add('image', TextType::class, [
                 'label' => 'Nombre de la imagen (opcional)',
                 'required' => false,
@@ -72,24 +84,12 @@ class ProductType extends AbstractType
                     ]),
                 ],
             ])
-
-            ->add('category', EntityType::class, [
-                'class' => Category::class,
-                'choice_label' => 'name', 
-                'placeholder' => 'Seleccioná una categoría',
-                'label' => 'Categoría',
-                'constraints' => [
-                    new Assert\NotNull([
-                        'message' => 'Seleccioná una categoría para el producto.',
-                    ]),
-                ],
-            ])
-
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
+        // El formulario se vincula directamente con la entidad Product
         $resolver->setDefaults([
             'data_class' => Product::class,
         ]);

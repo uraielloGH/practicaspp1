@@ -1,3 +1,4 @@
+{# Vista de CU006 - Administrar perfil #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Mi perfil{% endblock %}
@@ -6,10 +7,10 @@
 
 <h1 class="page-title">Administrar perfil</h1>
 <p class="page-subtitle">
-    Actualizá tu información de usuario. La contraseña es opcional: solo cambiala si lo necesitás.
+    Actualizá tu información de usuario. La contraseña es opcional, solo cambiala si lo necesitás.
 </p>
 
-{# ===== MENSAJES FLASH (con animación) ===== #}
+{# Mensajes flash que llegan desde el controlador (éxito / error al guardar) #}
 {% for label, messages in app.flashes %}
     {% for message in messages %}
         <div class="brekky-card flash-message" style="border-left:4px solid #6F4E37; margin-bottom:15px;">
@@ -18,31 +19,37 @@
     {% endfor %}
 {% endfor %}
 
-{# ===== FORMULARIO ===== #}
+{# Formulario de edición de perfil: nombre, email y cambio opcional de contraseña #}
 <div class="brekky-card" style="max-width:600px;">
-    
+
     {{ form_start(profileForm, { attr: { class: 'js-loading-form' } }) }}
 
         <div class="brekky-form-row">
+            {# Nombre del usuario #}
             {{ form_row(profileForm.nombre) }}
         </div>
 
         <div class="brekky-form-row">
+            {# Correo electrónico del usuario #}
             {{ form_row(profileForm.email) }}
         </div>
 
         <div class="brekky-form-row">
+            {# Primera entrada de la nueva contraseña (opcional) #}
             {{ form_row(profileForm.plainPassword.first) }}
         </div>
 
         <div class="brekky-form-row">
+            {# Repetición de la nueva contraseña para confirmar #}
             {{ form_row(profileForm.plainPassword.second) }}
         </div>
 
+        {# Botón principal: envía el formulario y dispara la actualización del perfil #}
         <button type="submit" class="btn-brekky">
             Guardar cambios
         </button>
 
+        {# Botón para volver al inicio sin aplicar cambios #}
         <a href="{{ path('app_home') }}" class="btn-back" style="margin-left:10px;">
             Cancelar
         </a>

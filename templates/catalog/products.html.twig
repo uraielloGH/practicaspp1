@@ -3,13 +3,27 @@
 {% block title %}Productos - {{ category.name }}{% endblock %}
 
 {% block body %}
+
+{# CU003 – Paso intermedio:
+   El usuario ya eligió una categoría y ahora mostramos todos sus productos.
+   El controlador nos pasa:
+     - category → para saber cuál categoría se está mostrando
+     - products → lista de productos asociados a esa categoría
+#}
+
 <h1 class="page-title">Productos de {{ category.name }}</h1>
 
+{# Botón para volver al listado de categorías (primer paso del CU003) #}
 <a class="btn-back" href="{{ path('catalog_categories') }}">← Volver a categorías</a>
 
 <div class="catalog-container" style="margin-top: 20px;">
+
+    {# Recorremos todos los productos de la categoría #}
     {% for product in products %}
+
         <article class="catalog-card">
+
+            {# Imagen del producto si tiene una cargada #}
             {% if product.image %}
                 <img
                     src="{{ asset('images/' ~ product.image) }}"
@@ -17,18 +31,28 @@
                 >
             {% endif %}
 
+            {# Información básica del producto #}
             <h3>{{ product.name }}</h3>
             <p>{{ product.description }}</p>
             <p><strong>${{ product.price }}</strong></p>
 
-            <a class="btn-brekky" href="{{ path('catalog_product_detail', { id: product.id }) }}">
+            {# Botón para ir al Paso final del CU003: ver detalle del producto #}
+            <a class="btn-brekky"
+               href="{{ path('catalog_product_detail', { id: product.id }) }}">
                 Ver detalle →
             </a>
+
         </article>
+
     {% else %}
+        {# Si la categoría no tiene productos, mostramos este mensaje.
+           Esto responde al flujo alternativo del diagrama del CU003.
+        #}
         <div class="brekky-card" style="grid-column: 1 / -1;">
             No hay productos en esta categoría.
         </div>
     {% endfor %}
+
 </div>
+
 {% endblock %}

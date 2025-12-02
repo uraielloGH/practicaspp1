@@ -4,43 +4,58 @@
 
 {% block body %}
 
+{# Pantalla de encuesta para obtener recomendaciones personalizadas #}
 <h1 class="page-title">Encuesta para recomendaciones</h1>
-<p class="page-subtitle">Completá esta breve encuesta y obtené recomendaciones personalizadas.</p>
+<p class="page-subtitle">
+    Completá esta breve encuesta y obtené recomendaciones pensadas para vos
+</p>
 
 <div class="brekky-card" style="max-width: 650px;">
 
+    {# Formulario principal de la encuesta de desayuno #}
     {{ form_start(surveyForm) }}
 
+        {# Nivel de actividad física del usuario #}
         <div class="brekky-form-row">
             {{ form_row(surveyForm.activityLevel) }}
         </div>
 
+        {# Objetivo principal que quiere lograr #}
         <div class="brekky-form-row">
             {{ form_row(surveyForm.mainGoal) }}
         </div>
 
+        {# Preferencia de sabor para el desayuno #}
         <div class="brekky-form-row">
             {{ form_row(surveyForm.flavorPreference) }}
         </div>
 
+        {# Restricciones o tipo de alimentación #}
         <div class="brekky-form-row">
             {{ form_row(surveyForm.restriction) }}
         </div>
 
+        {# Qué tan importante es el desayuno en la rutina diaria #}
         <div class="brekky-form-row">
             {{ form_row(surveyForm.breakfastImportance) }}
         </div>
 
+        {# Comentarios extra que el usuario quiera contar #}
         <div class="brekky-form-row">
             {{ form_row(surveyForm.notes) }}
         </div>
 
-        <button type="submit" class="btn-brekky">Obtener recomendaciones</button>
+        <button type="submit" class="btn-brekky">
+            Obtener recomendaciones
+        </button>
 
     {{ form_end(surveyForm) }}
 
 </div>
 
-<a class="btn-back" href="{{ path('app_home') }}" style="margin-top:20px;">← Volver al inicio</a>
+{# Link para volver a la pantalla principal de Brekky #}
+<a class="btn-back" href="{{ path('app_home') }}" style="margin-top:20px;">
+    ← Volver al inicio
+</a>
 
 {% endblock %}

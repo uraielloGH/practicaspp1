@@ -19,34 +19,39 @@ class ProfileController extends AbstractController
         EntityManagerInterface $entityManager,
         UserPasswordHasherInterface $passwordHasher
     ): Response {
-        // Aseguramos que haya usuario logueado
+        // Usuario debe estar logueado para editar su perfil
         $user = $this->getUser();
         if (!$user instanceof User) {
+            // Si no hay usuario, lo mandamos al login
             return $this->redirectToRoute('app_login');
         }
 
+        // Creamos el formulario con los datos actuales del perfil
         $form = $this->createForm(ProfileType::class, $user);
         $form->handleRequest($request);
 
+        // Procesamos el formulario cuando el usuario lo envía
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var string|null $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
 
+            // Si escribió una nueva contraseña, la encriptamos antes de guardar
             if (!empty($plainPassword)) {
-                // Hash de la nueva contraseña (RN02)
                 $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
                 $user->setPassword($hashedPassword);
             }
 
-            // nombre y email se actualizan solos porque están mapeados al User
+            // Nombre y email se actualizan solos porque están mapeados al User
             $entityManager->flush();
 
+            // Avisamos que el perfil se guardó bien
             $this->addFlash('success', 'Perfil actualizado correctamente.');
 
-            // Volvemos a la misma pantalla mostrando los datos actualizados
+            // Recargamos la página para mostrar los datos actualizados
             return $this->redirectToRoute('profile_edit');
         }
 
+        // Primera carga o formulario con errores
         return $this->render('profile/edit.html.twig', [
             'profileForm' => $form->createView(),
         ]);

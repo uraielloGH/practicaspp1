@@ -1,17 +1,23 @@
+{# Formulario parcial para crear / editar productos (CU007) #}
+
 {{ form_start(form, { attr: { class: 'js-loading-form' } }) }}
 
+    {# Nombre del producto #}
     <div class="brekky-form-row">
         {{ form_row(form.name) }}
     </div>
 
+    {# Descripción del producto #}
     <div class="brekky-form-row">
         {{ form_row(form.description) }}
     </div>
 
+    {# Precio en ARS #}
     <div class="brekky-form-row">
         {{ form_row(form.price) }}
     </div>
 
+    {# Nombre del archivo de imagen dentro de /public/images #}
     <div class="brekky-form-row">
         {{ form_row(form.image) }}
         <small style="font-size: 12px; opacity: .7;">
@@ -19,14 +25,17 @@
         </small>
     </div>
 
+    {# Categoría a la que pertenece el producto #}
     <div class="brekky-form-row">
         {{ form_row(form.category) }}
     </div>
 
+    {# Botón principal del formulario (texto configurable desde new/edit) #}
     <button class="btn-brekky">
         {{ button_label|default('Guardar') }}
     </button>
 
+    {# Volver al listado sin aplicar cambios #}
     <a href="{{ path('app_product_index') }}" class="btn-back" style="margin-left:10px;">
         Cancelar
     </a>

@@ -1,71 +1,76 @@
 security:
-    role_hierarchy:
-        ROLE_ADMIN: ROLE_USER
+  role_hierarchy:
+    # Un admin tiene también todos los permisos de usuario común
+    ROLE_ADMIN: ROLE_USER
 
-    # Hashing de contraseñas
-    password_hashers:
-        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+  # Cómo se hashéan las contraseñas de los usuarios
+  password_hashers:
+    Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
 
-    # Cargar usuarios desde la BD
-    providers:
-        app_user_provider:
-            entity:
-                class: App\Entity\User
-                property: email
+  # De dónde saca Symfony los usuarios (nuestra tabla User)
+  providers:
+    app_user_provider:
+      entity:
+        class: App\Entity\User
+        property: email      # el login se hace buscando por email
 
-    firewalls:
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
+  firewalls:
+    # Zona "dev": profiler, assets, etc. sin seguridad
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
 
-        main:
-            lazy: true
-            provider: app_user_provider
-            custom_authenticator: App\Security\LoginFormAuthenticator
+    # Firewall principal de la app
+    main:
+      lazy: true
+      provider: app_user_provider
+      custom_authenticator: App\Security\LoginFormAuthenticator
 
-            logout:
-                path: app_logout
-                # 🔥 Redirección después de cerrar sesión
-                target: app_home
+      # Cerrar sesión
+      logout:
+        path: app_logout
+        target: app_home     # después de cerrar sesión volvemos a la home
 
-            remember_me:
-                secret: '%kernel.secret%'
-                lifetime: 604800  # 1 semana
-                path: /
-                always_remember_me: true
+      # Opción "Recordarme" del login
+      remember_me:
+        secret: '%kernel.secret%'
+        lifetime: 604800     # 1 semana
+        path: /
+        always_remember_me: true
 
-    # PROTECCIÓN DE RUTAS
-    access_control:
-        # Rutas públicas
-        - { path: ^/home, roles: PUBLIC_ACCESS }
+  # Qué rutas son públicas y cuáles requieren estar logueado / ser admin
+  access_control:
+    # Rutas públicas
+    - { path: ^/home, roles: PUBLIC_ACCESS }
 
-        # Rutas solo para usuarios logueados
-        - { path: ^/perfil, roles: ROLE_USER }
-        - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^/products, roles: ROLE_USER }
-        - { path: ^/recomendaciones, roles: ROLE_USER }
-        - { path: ^/stores, roles: ROLE_USER }
+    # Rutas solo para usuarios logueados
+    - { path: ^/perfil, roles: ROLE_USER }
+    - { path: ^/profile, roles: ROLE_USER }
+    - { path: ^/products, roles: ROLE_USER }
+    - { path: ^/recomendaciones, roles: ROLE_USER }
+    - { path: ^/stores, roles: ROLE_USER }
+    - { path: ^/catalog, roles: ROLE_USER }
 
-        # CRUD categorías – ADMIN
-        - { path: ^/category/new, roles: ROLE_ADMIN }
-        - { path: ^/category/\d+/edit, roles: ROLE_ADMIN }
-        - { path: ^/category/\d+, roles: ROLE_ADMIN }
+    # CRUD categorías – solo admin
+    - { path: ^/category/new, roles: ROLE_ADMIN }
+    - { path: ^/category/\d+/edit, roles: ROLE_ADMIN }
+    - { path: ^/category/\d+, roles: ROLE_ADMIN }
 
-        # CRUD productos – ADMIN
-        - { path: ^/product/new, roles: ROLE_ADMIN }
-        - { path: ^/product/\d+/edit, roles: ROLE_ADMIN }
-        - { path: ^/product/\d+, roles: ROLE_ADMIN }
-        - { path: ^/product, roles: ROLE_ADMIN }
+    # CRUD productos – solo admin
+    - { path: ^/product/new, roles: ROLE_ADMIN }
+    - { path: ^/product/\d+/edit, roles: ROLE_ADMIN }
+    - { path: ^/product/\d+, roles: ROLE_ADMIN }
+    - { path: ^/product, roles: ROLE_ADMIN }
 
-        # Panel admin
-        - { path: ^/admin, roles: ROLE_ADMIN }
-
+    # Panel admin
+    - { path: ^/admin, roles: ROLE_ADMIN }
 
 when@test:
-    security:
-        password_hashers:
-            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
-                algorithm: auto
-                cost: 4
-                time_cost: 3
-                memory_cost: 10
+  security:
+    # En tests bajamos el costo del hash de contraseñas para que las pruebas corran más rápido
+    password_hashers:
+      Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+        algorithm: auto
+        cost: 4
+        time_cost: 3
+        memory_cost: 10

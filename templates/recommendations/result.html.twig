@@ -1,3 +1,7 @@
+{# CU004 - Obtener recomendaciones
+   Vista que muestra las sugerencias generadas a partir de la encuesta
+   RecommendationController::survey() -> recommendations/result.html.twig
+#}
 {% extends 'base.html.twig' %}
 
 {% block title %}Tus recomendaciones{% endblock %}
@@ -5,10 +9,13 @@
 {% block body %}
 
 <h1 class="page-title">Tus recomendaciones personalizadas</h1>
-<p class="page-subtitle">Estas sugerencias fueron generadas según tus respuestas.</p>
+<p class="page-subtitle">
+    Estas sugerencias se armaron en base a las respuestas que completaste en la encuesta.
+</p>
 
 <div style="display:flex; flex-direction:column; gap:25px; max-width:700px;">
 
+    {# Lista de ideas de desayuno / alimentos sugeridos #}
     <div class="brekky-card">
         <h2>Alimentos recomendados</h2>
         <ul class="brekky-list">
@@ -18,6 +25,7 @@
         </ul>
     </div>
 
+    {# Tips generales de hábitos según objetivo y respuestas #}
     <div class="brekky-card">
         <h2>Consejos de hábitos</h2>
         <ul class="brekky-list">
@@ -27,6 +35,7 @@
         </ul>
     </div>
 
+    {# Sugerencias de movimiento / actividad física #}
     <div class="brekky-card">
         <h2>Rutinas de ejercicio</h2>
         <ul class="brekky-list">
@@ -40,10 +49,12 @@
 
 <div style="margin-top:30px; display:flex; gap:15px; flex-wrap:wrap;">
 
+    {# Volver a correr la encuesta con otras respuestas #}
     <a class="btn-brekky" href="{{ path('recommendations_survey') }}">
         Completar otra encuesta
     </a>
 
+    {# Opción para que el usuario guarde o imprima sus recomendaciones #}
     <button class="btn-back" onclick="window.print();">
         Imprimir / Guardar PDF
     </button>

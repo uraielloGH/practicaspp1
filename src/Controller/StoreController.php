@@ -9,10 +9,24 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class StoreController extends AbstractController
 {
+    /**
+     * Página principal de tiendas.
+     *
+     * El usuario puede:
+     *  - Ver todas las cafeterías disponibles (vista inicial)
+     *  - Usar el buscador para filtrar por ciudad, zona o nombre
+     *  - Recibir mensajes de error si busca sin escribir nada
+     *  - Ver mensaje “sin resultados” cuando no coinciden tiendas
+     *
+     * Este método implementa todo el CU005.
+     */
     #[Route('/tiendas', name: 'store_index')]
     public function index(Request $request): Response
     {
-        // Cafeterías reales de Santa Fe Capital
+        /**
+         * Lista fija de cafeterías (versión académica sin BD).
+         * Cada tienda tiene datos básicos para mostrar en la grilla.
+         */
         $stores = [
             [
                 'name'    => 'Ludwing Cafecito',
@@ -44,7 +58,12 @@ class StoreController extends AbstractController
             ],
         ];
 
-        // Saber si el usuario hizo "submit" (hay parámetro q en la URL)
+        /**
+         * Buscar parámetro "q" en la URL
+         * - Si existe pero está vacío → error
+         * - Si no existe → carga inicial (mostrar todas)
+         * - Si tiene texto → se filtra
+         */
         $searchParamExists = $request->query->has('q');
         $search = trim((string) $request->query->get('q', ''));
 
@@ -52,14 +71,19 @@ class StoreController extends AbstractController
         $searchError = null;
 
         if ($searchParamExists && $search === '') {
-            // E1 – el usuario apretó Buscar sin escribir nada
+            // Usuario hizo clic en “Buscar” sin escribir nada → error FA01
             $searchError = 'Por favor ingresá una ciudad, barrio o zona válida.';
-            $filteredStores = $stores; // o [] si preferís no mostrar nada
-        } elseif ($search === '') {
-            // carga inicial sin búsqueda → mostrar todas
+            $filteredStores = $stores; // Podría usarse [] según preferencia
+        } 
+        elseif ($search === '') {
+            // Vista inicial del CU: mostrar todas las tiendas
             $filteredStores = $stores;
-        } else {
-            // hay texto de búsqueda → filtramos
+        } 
+        else {
+            /**
+             * Filtrado real: comparamos el texto de búsqueda
+             * con city / zone / name de cada tienda.
+             */
             $searchLower = mb_strtolower($search);
 
             foreach ($stores as $store) {
@@ -74,6 +98,13 @@ class StoreController extends AbstractController
             }
         }
 
+        /**
+         * Render final:
+         * - stores: lista filtrada o completa
+         * - search: texto ingresado
+         * - noResults: true si hubo búsqueda pero sin coincidencias
+         * - searchError: mensaje para FA01 (criterio vacío)
+         */
         return $this->render('store/index.html.twig', [
             'stores'      => $filteredStores,
             'search'      => $search,

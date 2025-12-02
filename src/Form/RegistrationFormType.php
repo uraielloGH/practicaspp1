@@ -11,10 +11,16 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * Formulario de alta de usuario (CU001 - Registrarse).
+ * Acá definimos los campos que completa el usuario en la pantalla de registro
+ * y las validaciones básicas de cada uno.
+ */
 class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        // Campo de nombre completo que se guarda directamente en la entidad User
         $builder
             ->add('nombre', TextType::class, [
                 'label' => 'Nombre completo',
@@ -24,6 +30,8 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
+
+            // Campo de email del usuario, también mapeado a la entidad User
             ->add('email', EmailType::class, [
                 'label' => 'Correo electrónico',
                 'constraints' => [
@@ -32,6 +40,10 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
+
+            // Campo de contraseña solo para el formulario.
+            // No se guarda directo: luego el controlador la toma, la hashea
+            // y recién ahí se setea en el User.
             ->add('password', PasswordType::class, [
                 'mapped' => false,
                 'label' => 'Contraseña',
@@ -49,7 +61,7 @@ class RegistrationFormType extends AbstractType
                         'minMessage' => 'La contraseña debe tener al menos {{ limit }} caracteres.',
                     ]),
                     new Assert\Regex([
-                        // al menos un dígito y al menos un carácter no alfanumérico
+                        // Validamos que tenga por lo menos un número y un símbolo
                         'pattern' => '/^(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/',
                         'message' => 'Debe incluir al menos un número y un carácter especial.',
                     ]),
@@ -59,9 +71,9 @@ class RegistrationFormType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
+        // Indicamos que este formulario trabaja contra la entidad User
         $resolver->setDefaults([
             'data_class' => User::class,
         ]);
     }
 }
-

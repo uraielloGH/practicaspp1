@@ -8,33 +8,31 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(
     fields: ['email'],
     message: 'Ya existe una cuenta registrada con este correo electrónico.'
 )]
+// Entidad que representa al usuario registrado en el sistema.
+// Se usa tanto para el registro (CU001) como para el login (CU002).
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private ?int $id = null;          // Id interno del usuario
 
     #[ORM\Column(length: 180, unique: true)]
-    private ?string $email = null;
+    private ?string $email = null;    // Correo que usa para loguearse
 
     #[ORM\Column]
-    private array $roles = [];
+    private array $roles = [];        // Roles del usuario (por ahora solo ROLE_USER)
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
-    private ?string $password = null;
+    private ?string $password = null; // Contraseña hasheada
 
     #[ORM\Column(length: 100)]
-    private ?string $nombre = null;
+    private ?string $nombre = null;   // Nombre completo mostrado en la app
 
     public function getId(): ?int
     {
@@ -53,23 +51,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
+    // Identificador principal del usuario en el sistema (lo usamos como username)
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
+
+        // nos aseguramos de que siempre tenga al menos ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
@@ -82,9 +74,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
+    // Devuelve la contraseña ya hasheada (no se guarda nunca en texto plano)
     public function getPassword(): string
     {
         return $this->password;
@@ -97,12 +87,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
+    // Acá podríamos limpiar datos sensibles temporales si los usáramos
     public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
 

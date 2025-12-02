@@ -1,3 +1,4 @@
+{# Vista de administración de productos (CU007) #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Gestión de productos{% endblock %}
@@ -9,7 +10,7 @@
     Desde aquí podés crear, editar o eliminar productos del catálogo Brekky.
 </p>
 
-{# Mensajes flash globales del CRUD (si los usan) #}
+{# Mensajes flash del CRUD (crear / editar / eliminar) #}
 {% for label, messages in app.flashes %}
     {% for message in messages %}
         <div class="brekky-card flash-message" style="border-left:4px solid #6F4E37; margin-bottom:15px;">
@@ -18,10 +19,12 @@
     {% endfor %}
 {% endfor %}
 
+{# Acción principal: crear un nuevo producto #}
 <div style="margin-bottom: 20px;">
     <a href="{{ path('app_product_new') }}" class="btn-brekky">+ Nuevo producto</a>
 </div>
 
+{# Tabla con el listado de productos y acciones #}
 <div class="brekky-card">
     <table style="width:100%; border-collapse: collapse;">
         <thead>
@@ -38,20 +41,27 @@
                 <td style="padding:8px;">{{ product.name }}</td>
                 <td style="padding:8px;">${{ product.price }}</td>
                 <td style="padding:8px;">
-    {% if product.image %}
-        <img src="{{ asset('images/' ~ product.image) }}"
-             alt="{{ product.name }}"
-             style="height:40px; border-radius:6px;">
-    {% else %}
-        <span style="opacity:0.6;">Sin imagen</span>
-    {% endif %}
-</td>
+                    {% if product.image %}
+                        <img
+                            src="{{ asset('images/' ~ product.image) }}"
+                            alt="{{ product.name }}"
+                            style="height:40px; border-radius:6px;"
+                        >
+                    {% else %}
+                        <span style="opacity:0.6;">Sin imagen</span>
+                    {% endif %}
+                </td>
                 <td style="padding:8px;">
-                    <a href="{{ path('app_product_edit', {'id': product.id}) }}" class="btn-brekky" style="padding:6px 12px; font-size:14px;">
-                         Editar
+                    {# Botón para editar el producto seleccionado #}
+                    <a
+                        href="{{ path('app_product_edit', {'id': product.id}) }}"
+                        class="btn-brekky"
+                        style="padding:6px 12px; font-size:14px;"
+                    >
+                        Editar
                     </a>
 
-
+                    {# Formulario de eliminación (POST con token CSRF) #}
                     {{ include('product/_delete_form.html.twig') }}
                 </td>
             </tr>

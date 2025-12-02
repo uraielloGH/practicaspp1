@@ -5,19 +5,20 @@
 {% block body %}
 <div class="auth-wrapper">
     <div class="auth-card brekky-card">
+        {# Pantalla de inicio de sesión (CU02) #}
         <h1 class="page-title">Iniciar sesión</h1>
         <p class="page-subtitle">
             Accedé a tu cuenta para ver tus recomendaciones, productos y tiendas cercanas.
         </p>
 
-        {# Mensaje de error de Symfony Security (si hubo fallo al loguear) #}
+        {# Si hubo un error al intentar loguear, lo mostramos acá #}
         {% if error %}
             <div class="flash-message brekky-card" style="margin-bottom: 10px;">
                 {{ error.messageKey|trans(error.messageData, 'security') }}
             </div>
         {% endif %}
 
-        {# Si ya está logueado, se puede avisar o redirigir desde el controlador #}
+        {# Si el usuario ya está logueado, avisamos quién es #}
         {% if app.user %}
             <p class="auth-secondary" style="margin-bottom: 1.5rem;">
                 Ya estás logueado como <strong>{{ app.user.userIdentifier }}</strong>.
@@ -25,7 +26,6 @@
         {% endif %}
 
         <form method="post" class="js-loading-form">
-
             <div class="brekky-form-row">
                 <label for="inputEmail">Correo electrónico</label>
                 <input
@@ -57,7 +57,7 @@
                 <a href="{{ path('app_forgot_password') }}">¿Olvidaste tu contraseña?</a>
             </div>
 
-
+            {# Token CSRF para que el login sea más seguro #}
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
             <button class="btn-brekky" type="submit">

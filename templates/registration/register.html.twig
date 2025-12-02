@@ -5,13 +5,15 @@
 {% block body %}
 <div class="auth-wrapper">
     <div class="auth-card brekky-card">
+        
+        {# Título y pequeña descripción de qué trata la página #}
         <h1 class="page-title">Crear cuenta</h1>
         <p class="page-subtitle">
             Registrate para empezar a recibir recomendaciones personalizadas
             y guardar tus preferencias en Brekky.
         </p>
 
-        {# Mensajes flash por si hay #}
+        {# Mensajes flash: se usan para avisar si salió bien o hubo algún error #}
         {% for label, messages in app.flashes %}
             {% for message in messages %}
                 <div class="flash-message brekky-card" style="margin-bottom: 10px;">
@@ -20,6 +22,7 @@
             {% endfor %}
         {% endfor %}
 
+        {# Arrancamos el formulario de registro #}
         {{ form_start(registrationForm, {
             attr: {
                 class: 'js-loading-form',
@@ -27,57 +30,63 @@
             }
         }) }}
 
+            {# Campo: nombre completo #}
             <div class="brekky-form-row">
                 {{ form_label(registrationForm.nombre, 'Nombre completo') }}
                 {{ form_widget(registrationForm.nombre) }}
                 {{ form_errors(registrationForm.nombre) }}
             </div>
 
+            {# Campo: correo electrónico #}
             <div class="brekky-form-row">
                 {{ form_label(registrationForm.email, 'Correo electrónico') }}
                 {{ form_widget(registrationForm.email) }}
                 {{ form_errors(registrationForm.email) }}
             </div>
 
+            {# Campo: contraseña (el valor real se convierte después a hash en el controlador) #}
             <div class="brekky-form-row">
                 {{ form_label(registrationForm.password, 'Contraseña') }}
                 {{ form_widget(registrationForm.password) }}
                 {{ form_errors(registrationForm.password) }}
             </div>
 
+            {# Botón principal del formulario #}
             <button type="submit" class="btn-brekky">
                 Registrarse
             </button>
 
         {{ form_end(registrationForm) }}
 
+        {# Links secundarios: iniciar sesión o recuperar contraseña #}
         <p class="auth-secondary">
             ¿Ya tenés cuenta?
             <a href="{{ path('app_login') }}">Iniciá sesión</a>
             o
             <a href="{{ path('app_forgot_password') }}">recuperá tu contraseña</a>.
-            {# ajustá el nombre de la ruta si tu forgot-password tiene otro #}
         </p>
     </div>
 </div>
 {% endblock %}
 
+{# Esta parte es el script para guardar datos temporales del usuario (FA02 del CU001) #}
 {% block javascripts %}
     {{ parent() }}
 
     <script>
-        // FA02: guardar temporalmente los datos de registro (sin contraseña)
         document.addEventListener('DOMContentLoaded', function () {
             const form = document.getElementById('registration-form');
             if (!form) return;
 
             const STORAGE_KEY = 'brekky_registration_draft';
 
+            // Campos que sí podemos guardar de forma segura
             const nombreInput = form.querySelector('input[name="registration_form[nombre]"]');
             const emailInput  = form.querySelector('input[name="registration_form[email]"]');
-            // Por seguridad, NO guardamos la contraseña en localStorage
+            // Por seguridad, nunca guardamos la contraseña en localStorage
 
-            // 1) Cargar borrador si existe
+            // 1) Si el usuario se había desconectado o recargado la página,
+            //    tratamos de recuperar lo que había escrito antes.
             try {
                 const saved = localStorage.getItem(STORAGE_KEY);
                 if (saved) {
@@ -89,7 +98,7 @@
                 console.warn('No se pudo leer el borrador de registro', e);
             }
 
-            // 2) Guardar en cada cambio
+            // 2) Guardar automáticamente cada vez que el usuario escribe
             function saveDraft() {
                 const data = {
                     nombre: nombreInput ? nombreInput.value : '',
@@ -101,7 +110,7 @@
             if (nombreInput) nombreInput.addEventListener('input', saveDraft);
             if (emailInput)  emailInput.addEventListener('input', saveDraft);
 
-            // 3) Al enviar el formulario, borramos el borrador
+            // 3) Cuando el usuario envía el formulario, borramos el borrador
             form.addEventListener('submit', function () {
                 localStorage.removeItem(STORAGE_KEY);
             });

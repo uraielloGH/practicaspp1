@@ -1,28 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ product.name }} - Brekky{% endblock %}
+{% block title %}{{ product.name }}{% endblock %}
 
 {% block body %}
 
-<a class="btn-back" href="{{ path('catalog_products_by_category', { id: category.id }) }}">
+{# CU003 – Paso final:
+   El usuario eligió un producto y acá mostramos toda su información.
+   El controlador ya nos pasó el producto y también su categoría
+   para poder mostrar el nombre y armar el link de “volver atrás”. #}
+
+<a class="btn-back"
+   href="{{ path('catalog_products_by_category', { id: category.id }) }}">
     ← Volver a productos
 </a>
 
-<h1 class="page-title" style="margin-top: 1rem;">{{ product.name }}</h1>
+<h1>{{ product.name }}</h1>
 
-<div class="brekky-card" style="max-width: 420px; margin-top: 1rem;">
+<div style="margin-top:20px;">
+
+    {# Imagen del producto si tiene cargada una #}
     {% if product.image %}
         <img src="{{ asset('images/' ~ product.image) }}"
              alt="{{ product.name }}"
-             class="product-detail-img">
+             style="width:300px; height:auto; border-radius:8px;">
     {% endif %}
 
-    <p><strong>Precio:</strong> ${{ product.price }}</p>
-
-    <p><strong>Descripción:</strong></p>
-    <p>{{ product.description }}</p>
-
-    <p><strong>Categoría:</strong> {{ category.name }}</p>
 </div>
+
+{# Datos principales del producto #}
+<p><strong>Precio:</strong> ${{ product.price }}</p>
+
+<p><strong>Descripción:</strong></p>
+<p>{{ product.description }}</p>
+
+<p><strong>Categoría:</strong> {{ category.name }}</p>
 
 {% endblock %}

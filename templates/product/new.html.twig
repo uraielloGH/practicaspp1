@@ -1,3 +1,4 @@
+{# Vista de alta de producto (CU007) #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Nuevo producto{% endblock %}
@@ -9,8 +10,13 @@
     Cargá un nuevo producto al catálogo Brekky.
 </p>
 
+{# Contenedor principal del formulario de creación #}
 <div class="brekky-card" style="max-width:700px;">
-    {{ include('product/_form.html.twig', {'form': form, 'button_label': 'Guardar'}) }}
+    {# Reutilizamos el mismo formulario que para edición, cambiando el texto del botón #}
+    {{ include('product/_form.html.twig', {
+        form: form,
+        button_label: 'Guardar'
+    }) }}
 </div>
 
 {% endblock %}

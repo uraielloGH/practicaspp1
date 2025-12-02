@@ -12,9 +12,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 #[Route('/product')]
-#[IsGranted('ROLE_ADMIN')] // solo administradores pueden acceder a este controlador
+#[IsGranted('ROLE_ADMIN')] // Solo administradores pueden acceder a la gestión de productos
 class ProductController extends AbstractController
 {
+    /**
+     * Listado de productos para el administrador.
+     * Acá se ve la grilla con todos los productos y las acciones de ABM.
+     */
     #[Route('/', name: 'app_product_index', methods: ['GET'])]
     public function index(ProductRepository $productRepository): Response
     {
@@ -23,6 +27,10 @@ class ProductController extends AbstractController
         ]);
     }
 
+    /**
+     * Alta de producto (CU007 – Agregar producto).
+     * Muestra el formulario y, si es válido, guarda en BD y vuelve al listado.
+     */
     #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]
     public function new(Request $request, ProductRepository $productRepository): Response
     {
@@ -31,20 +39,26 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Guardamos el nuevo producto
             $productRepository->save($product, true);
 
-            // Mensaje de éxito para el CU
+            // Mensaje de éxito para el admin
             $this->addFlash('success', 'Producto creado correctamente.');
 
+            // Volvemos al listado de productos
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
+        // Primera carga o formulario con errores
         return $this->render('product/new.html.twig', [
             'product' => $product,
             'form'    => $form->createView(),
         ]);
     }
 
+    /**
+     * Vista de detalle de un producto (no es el foco del CU, pero queda disponible).
+     */
     #[Route('/{id}', name: 'app_product_show', methods: ['GET'])]
     public function show(Product $product): Response
     {
@@ -53,6 +67,9 @@ class ProductController extends AbstractController
         ]);
     }
 
+    /**
+     * Edición de producto (CU007 – Modificar producto).
+     */
     #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Product $product, ProductRepository $productRepository): Response
     {
@@ -60,28 +77,33 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Guardamos cambios sobre el producto existente
             $productRepository->save($product, true);
 
-            // Mensaje de éxito
             $this->addFlash('success', 'Producto actualizado correctamente.');
 
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
+        // Mostrar formulario de edición (con errores si los hay)
         return $this->render('product/edit.html.twig', [
             'product' => $product,
             'form'    => $form->createView(),
         ]);
     }
 
+    /**
+     * Baja de producto (CU007 – Eliminar producto).
+     */
     #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
     public function delete(Request $request, Product $product, ProductRepository $productRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
+            // Eliminamos de la base
             $productRepository->remove($product, true);
             $this->addFlash('success', 'Producto eliminado correctamente.');
         } else {
-            // por si alguna vez falla el token
+            // Por si alguna vez falla el token CSRF
             $this->addFlash('error', 'No se pudo eliminar el producto. Intentá nuevamente.');
         }
 
